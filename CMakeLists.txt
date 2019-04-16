@@ -7,7 +7,7 @@ project(untitled
     DESCRIPTION "GBA programming"
     LANGUAGES CXX)
 
-set(CMAKE_MODULE_PATH "cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(devkitPro)
 
