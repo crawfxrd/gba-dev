@@ -33,7 +33,7 @@ set(CMAKE_OBJCOPY "${DEVKITARM_ROOT_DIR}/bin/${TOOLCHAIN_PREFIX}objcopy")
 set(_arch_flags "-mthumb -mthumb-interwork -mcpu=arm7tdmi -mtune=arm7tdmi")
 set(_common_flags "${_arch_flags} -Wall -Wextra")
 set(_c_flags "-fno-common")
-set(_cxx_flags "-fno-rtti -fno-exceptions")
+set(_cxx_flags "-fno-rtti -fno-exceptions -fno-asynchronous-unwind-tables")
 set(_debug_flags "-g -O0")
 set(_release_flags "-O3 -fomit-frame-pointer -ffast-math")
 
