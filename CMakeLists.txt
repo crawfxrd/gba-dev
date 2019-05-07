@@ -16,4 +16,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(untitled src/main.cpp)
+target_include_directories(untitled PRIVATE src)
 make_gba_rom(untitled)
