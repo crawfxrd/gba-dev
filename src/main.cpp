@@ -25,6 +25,7 @@ using u32 = uint32_t;
 #define GBA_GAME_SRAM_ADDR  0x0E00'0000UL
 
 #define DISPCNT (reinterpret_cast<volatile u16 *>(GBA_IOREG_ADDR + 0x0000UL))
+#define VCOUNT (reinterpret_cast<volatile u16 *>(GBA_IOREG_ADDR + 0x0006UL))
 #define PALETTE (reinterpret_cast<volatile u16 *>(GBA_PALETTE_ADDR))
 #define VRAM (reinterpret_cast<volatile u16 *>(GBA_VRAM_ADDR))
 
@@ -33,6 +34,7 @@ using u32 = uint32_t;
 
 #define DISPLAY_MODE3 0x3UL
 #define DISPLAY_MODE4 0x4UL
+#define DISPLAY_SELECT_FRAME    BIT(4)
 #define DISPLAY_ENABLE_BG2      BIT(10)
 
 static
@@ -70,6 +72,21 @@ display_control(u16 val)
     *DISPCNT = val;
 }
 
+static
+void
+vblank()
+{
+    while (*VCOUNT >= 160);
+    while (*VCOUNT < 160);
+}
+
+static
+void
+vflip()
+{
+    *DISPCNT ^= DISPLAY_SELECT_FRAME;
+}
+
 int
 main(void)
 {
@@ -85,6 +102,15 @@ main(void)
 
     display_control(DISPLAY_MODE4 | DISPLAY_ENABLE_BG2);
 
-    while (true);
+    int cnt = 0;
+    while (true) {
+        vblank();
+
+        if (cnt == 60) {
+            vflip();
+            cnt = 0;
+        }
+        ++cnt;
+    }
     return 0;
 }
