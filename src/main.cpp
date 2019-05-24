@@ -7,6 +7,7 @@
 #include "types.hpp"
 #include "base.hpp"
 #include "bits.hpp"
+#include "input.hpp"
 
 #define DISPCNT (reinterpret_cast<volatile u16 *>(GBA_IOREG_ADDR + 0x0000UL))
 #define VCOUNT (reinterpret_cast<volatile u16 *>(GBA_IOREG_ADDR + 0x0006UL))
@@ -20,98 +21,6 @@
 #define DISPLAY_MODE4 0x4UL
 #define DISPLAY_SELECT_FRAME    bit(4)
 #define DISPLAY_ENABLE_BG2      bit(10)
-
-#define KEYINPUT (reinterpret_cast<volatile u16 *>(GBA_IOREG_ADDR + 0x0130UL))
-
-#define KEY_A       bit(0)
-#define KEY_B       bit(1)
-#define KEY_SELECT  bit(2)
-#define KEY_START   bit(3)
-#define KEY_RIGHT   bit(4)
-#define KEY_LEFT    bit(5)
-#define KEY_UP      bit(6)
-#define KEY_DOWN    bit(7)
-#define KEY_R       bit(8)
-#define KEY_L       bit(9)
-#define KEY_MASK    bitmask(9,0)
-
-static u16 __key_prev;
-static u16 __key_curr;
-
-static
-inline
-u32
-key_curr_state()
-{
-    return __key_curr;
-}
-
-static
-inline
-u32
-key_prev_state()
-{
-    return __key_prev;
-}
-
-static
-inline
-void
-key_poll()
-{
-    __key_prev = __key_curr;
-    __key_curr = ~(*KEYINPUT) & KEY_MASK;
-}
-
-static
-inline
-u32
-key_is_down(u32 key)
-{
-    return __key_curr & key;
-}
-
-static
-inline
-u32
-key_is_up(u32 key)
-{
-    return ~__key_curr & key;
-}
-
-static
-inline
-u32
-key_was_down(u32 key)
-{
-    return __key_prev & key;
-}
-
-static
-inline
-u32
-key_was_up(u32 key)
-{
-    return ~__key_prev & key;
-}
-
-static
-inline
-u32
-key_up(u32 key)
-{
-    //return key_was_down(key) & key_is_up(key);
-    return (__key_prev & ~__key_curr) & key;
-}
-
-static
-inline
-u32
-key_down(u32 key)
-{
-    //return key_was_up(key) & key_is_down(key);
-    return (~__key_prev & __key_curr) & key;
-}
 
 static
 constexpr
