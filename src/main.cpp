@@ -37,6 +37,98 @@ using u32 = uint32_t;
 #define DISPLAY_SELECT_FRAME    BIT(4)
 #define DISPLAY_ENABLE_BG2      BIT(10)
 
+#define KEYINPUT (reinterpret_cast<volatile u16 *>(GBA_IOREG_ADDR + 0x0130UL))
+
+#define KEY_A       BIT(0)
+#define KEY_B       BIT(1)
+#define KEY_SELECT  BIT(2)
+#define KEY_START   BIT(3)
+#define KEY_RIGHT   BIT(4)
+#define KEY_LEFT    BIT(5)
+#define KEY_UP      BIT(6)
+#define KEY_DOWN    BIT(7)
+#define KEY_R       BIT(8)
+#define KEY_L       BIT(9)
+#define KEY_MASK 0x03FF
+
+static u16 __key_prev;
+static u16 __key_curr;
+
+static
+inline
+u32
+key_curr_state()
+{
+    return __key_curr;
+}
+
+static
+inline
+u32
+key_prev_state()
+{
+    return __key_prev;
+}
+
+static
+inline
+void
+key_poll()
+{
+    __key_prev = __key_curr;
+    __key_curr = ~(*KEYINPUT) & KEY_MASK;
+}
+
+static
+inline
+u32
+key_is_down(u32 key)
+{
+    return __key_curr & key;
+}
+
+static
+inline
+u32
+key_is_up(u32 key)
+{
+    return ~__key_curr & key;
+}
+
+static
+inline
+u32
+key_was_down(u32 key)
+{
+    return __key_prev & key;
+}
+
+static
+inline
+u32
+key_was_up(u32 key)
+{
+    return ~__key_prev & key;
+}
+
+static
+inline
+u32
+key_up(u32 key)
+{
+    //return key_was_down(key) & key_is_up(key);
+    return (__key_prev & ~__key_curr) & key;
+}
+
+static
+inline
+u32
+key_down(u32 key)
+{
+    //return key_was_up(key) & key_is_down(key);
+    return (~__key_prev & __key_curr) & key;
+}
+
 static
 constexpr
 u16
@@ -102,15 +194,12 @@ main(void)
 
     display_control(DISPLAY_MODE4 | DISPLAY_ENABLE_BG2);
 
-    int cnt = 0;
     while (true) {
         vblank();
+        key_poll();
 
-        if (cnt == 60) {
+        if (key_down(KEY_A))
             vflip();
-            cnt = 0;
-        }
-        ++cnt;
     }
     return 0;
 }
