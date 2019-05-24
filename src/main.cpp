@@ -4,25 +4,9 @@
  * Copyright (c) 2019 Tim Crawford <crawfxrd@gmail.com>
  */
 
-#include <cstdint>
-
-using i8 = int8_t;
-using u8 = uint8_t;
-using i16 = int16_t;
-using u16 = uint16_t;
-using i32 = int32_t;
-using u32 = uint32_t;
-
-#define BIT(nr) (1UL << (nr))
-
-#define GBA_EWRAM_ADDR      0x0200'0000UL
-#define GBA_IWRAM_ADDR      0x0300'0000UL
-#define GBA_IOREG_ADDR      0x0400'0000UL
-#define GBA_PALETTE_ADDR    0x0500'0000UL
-#define GBA_VRAM_ADDR       0x0600'0000UL
-#define GBA_OAM_ADDR        0x0700'0000UL
-#define GBA_GAME_ROM_ADDR   0x0800'0000UL
-#define GBA_GAME_SRAM_ADDR  0x0E00'0000UL
+#include "types.hpp"
+#include "base.hpp"
+#include "bits.hpp"
 
 #define DISPCNT (reinterpret_cast<volatile u16 *>(GBA_IOREG_ADDR + 0x0000UL))
 #define VCOUNT (reinterpret_cast<volatile u16 *>(GBA_IOREG_ADDR + 0x0006UL))
@@ -34,22 +18,22 @@ using u32 = uint32_t;
 
 #define DISPLAY_MODE3 0x3UL
 #define DISPLAY_MODE4 0x4UL
-#define DISPLAY_SELECT_FRAME    BIT(4)
-#define DISPLAY_ENABLE_BG2      BIT(10)
+#define DISPLAY_SELECT_FRAME    bit(4)
+#define DISPLAY_ENABLE_BG2      bit(10)
 
 #define KEYINPUT (reinterpret_cast<volatile u16 *>(GBA_IOREG_ADDR + 0x0130UL))
 
-#define KEY_A       BIT(0)
-#define KEY_B       BIT(1)
-#define KEY_SELECT  BIT(2)
-#define KEY_START   BIT(3)
-#define KEY_RIGHT   BIT(4)
-#define KEY_LEFT    BIT(5)
-#define KEY_UP      BIT(6)
-#define KEY_DOWN    BIT(7)
-#define KEY_R       BIT(8)
-#define KEY_L       BIT(9)
-#define KEY_MASK 0x03FF
+#define KEY_A       bit(0)
+#define KEY_B       bit(1)
+#define KEY_SELECT  bit(2)
+#define KEY_START   bit(3)
+#define KEY_RIGHT   bit(4)
+#define KEY_LEFT    bit(5)
+#define KEY_UP      bit(6)
+#define KEY_DOWN    bit(7)
+#define KEY_R       bit(8)
+#define KEY_L       bit(9)
+#define KEY_MASK    bitmask(9,0)
 
 static u16 __key_prev;
 static u16 __key_curr;
