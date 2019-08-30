@@ -16,6 +16,7 @@ foreach(lang C CXX ASM)
     set(CMAKE_${lang}_FLAGS_MINSIZEREL_INIT "-Os")
     set(CMAKE_${lang}_FLAGS_RELEASE_INIT "${_release_flags}")
     set(CMAKE_${lang}_FLAGS_RELWITHDEBINFO_INIT "-g -O2")
+    set(CMAKE_DEPFILE_FLAGS_${lang} "-MMD -MP -MF <DEPFILE>")
 endforeach()
 
 set(CMAKE_EXE_LINKER_FLAGS_INIT "-specs=gba.specs")
