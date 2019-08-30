@@ -11,7 +11,7 @@ Building requires `devkitPro <https://devkitpro.org/>`_ installed and the
 
 .. code:: shell
 
-   ./configure.sh
+   ./configure.sh -G Ninja
    cmake --build build/
 
 Debugging
