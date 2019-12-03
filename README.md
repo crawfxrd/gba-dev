@@ -36,4 +36,4 @@ Continuing.
 ## License
 
 This software is made available under the terms of the Mozilla Public License,
-version 2.0. See LICENSE for details.
+version 2.0. See [LICENSE](./Licenses/MPL-2.0.txt) for details.
