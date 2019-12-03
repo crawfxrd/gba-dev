@@ -6,10 +6,11 @@ if(NOT DEFINED CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build, options are: Debug Release")
 endif()
 
+
 project(untitled
     VERSION 0.0.1
     DESCRIPTION "GBA programming"
-    LANGUAGES CXX)
+    LANGUAGES CXX ASM)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
