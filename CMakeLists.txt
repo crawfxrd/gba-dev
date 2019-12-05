@@ -20,14 +20,18 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_executable(untitled
+# Target to compile all 16-bit THUMB code
+add_library(thumb OBJECT
+    src/input.cpp
+    src/main.cpp
+    # Headers
     src/base.hpp
     src/bits.hpp
-    src/input.cpp
     src/input.hpp
-    src/main.cpp
     src/types.hpp)
+target_compile_options(thumb PRIVATE -mthumb)
 
+add_executable(untitled $<TARGET_OBJECTS:thumb>)
 target_include_directories(untitled PRIVATE src)
 target_link_options(untitled PRIVATE -Wl,-Map,untitled.map)
 make_gba_rom(untitled)
