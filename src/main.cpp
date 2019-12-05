@@ -10,9 +10,17 @@
 #include "input.hpp"
 
 #define DISPCNT (reinterpret_cast<volatile u16 *>(GBA_IOREG_ADDR + 0x0000UL))
+#define DISPSTAT (reinterpret_cast<volatile u16 *>(GBA_IOREG_ADDR + 0x0004UL))
 #define VCOUNT (reinterpret_cast<volatile u16 *>(GBA_IOREG_ADDR + 0x0006UL))
 #define PALETTE (reinterpret_cast<volatile u16 *>(GBA_PALETTE_ADDR))
 #define VRAM (reinterpret_cast<volatile u16 *>(GBA_VRAM_ADDR))
+
+using isr_t = void (*)();
+void master_isr();
+
+#define IRQ_HANDLER (reinterpret_cast<isr_t *>(0x0300'7FFCUL))
+#define IE (reinterpret_cast<volatile u16 *>(GBA_IOREG_ADDR + 0x0200UL))
+#define IME (reinterpret_cast<volatile u16 *>(GBA_IOREG_ADDR + 0x0208UL))
 
 #define DISPLAY_WIDTH 240
 #define DISPLAY_HEIGHT 160
@@ -58,11 +66,12 @@ display_control(u16 val)
 }
 
 static
+inline
 void
 vblank()
 {
-    while (*VCOUNT >= 160);
-    while (*VCOUNT < 160);
+    // VBlankIntrWait
+    asm("svc 0x05" ::: "r0", "r1");
 }
 
 static
@@ -73,7 +82,7 @@ vflip()
 }
 
 int
-main(void)
+main()
 {
     for (int i = 0; i < 8; ++i)
         *(PALETTE + i) = palette[i];
@@ -86,6 +95,13 @@ main(void)
     }
 
     display_control(DISPLAY_MODE4 | DISPLAY_ENABLE_BG2);
+
+    *IRQ_HANDLER = master_isr;
+    // Enable VBLANK interrupt
+    *DISPSTAT |= 1 << 3;
+    *IE = 1;
+    // Enable interrupts
+    *IME = 1;
 
     while (true) {
         vblank();

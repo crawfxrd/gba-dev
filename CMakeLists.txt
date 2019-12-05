@@ -6,7 +6,6 @@ if(NOT DEFINED CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build, options are: Debug Release")
 endif()
 
-
 project(untitled
     VERSION 0.0.1
     DESCRIPTION "GBA programming"
@@ -31,7 +30,14 @@ add_library(thumb OBJECT
     src/types.hpp)
 target_compile_options(thumb PRIVATE -mthumb)
 
-add_executable(untitled $<TARGET_OBJECTS:thumb>)
+# Target to compile all 32-bit ARM code
+add_library(arm OBJECT
+    src/isr.cpp
+    # Headers
+    src/types.hpp)
+target_compile_options(arm PRIVATE -marm)
+
+add_executable(untitled $<TARGET_OBJECTS:thumb> $<TARGET_OBJECTS:arm>)
 target_include_directories(untitled PRIVATE src)
 target_link_options(untitled PRIVATE -Wl,-Map,untitled.map)
 make_gba_rom(untitled)
