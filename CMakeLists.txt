@@ -1,5 +1,9 @@
 # SPDX-License-Identifier: MPL-2.0
 
+#
+# Copyright (c) 2019 Tim Crawford <crawfxrd@gmail.com>
+#
+
 cmake_minimum_required(VERSION 3.13)
 
 if(NOT DEFINED CMAKE_BUILD_TYPE)

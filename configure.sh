@@ -1,5 +1,5 @@
 #!/bin/sh
-# SPDX-License-Identifier: MPL-2.0
+# SPDX-License-Identifier: CC0-1.0
 
 if [ -z "$DEVKITPRO" ] || [ -z "$DEVKITARM" ]; then
     echo "Environment variables not set: DEVKITPRO DEVKITARM" >&2

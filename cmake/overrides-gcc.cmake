@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: MPL-2.0
+# SPDX-License-Identifier: CC0-1.0
 
 set(_arch_flags "-mthumb-interwork -mcpu=arm7tdmi -mtune=arm7tdmi")
 set(_common_flags "${_arch_flags} -Wall -Wextra")
