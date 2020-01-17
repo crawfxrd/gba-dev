@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: CC0-1.0
 
-set(_arch_flags "-mthumb-interwork -mcpu=arm7tdmi -mtune=arm7tdmi")
+set(_arch_flags "-mthumb-interwork -mcpu=arm7tdmi")
 set(_common_flags "${_arch_flags} -Wall -Wextra")
 set(_c_flags "-fno-common")
 set(_cxx_flags "-fno-rtti -fno-exceptions -fno-asynchronous-unwind-tables")
